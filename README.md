@@ -56,6 +56,31 @@ p0 = Process(
 processes = [p0]
 ```
 
+`VectorClockTimestampSolver#print()` prints out the data model of processes and events. For example, the following is the output of `print()` for the same example.
+
+```txt
+P0 [(M1_SEND), (M3_RECV), (M5_RECV), (INST), (M8_SEND)]
+P1 [(INST), (M3_SEND), (M2_RECV), (M4_SEND), (M5_SEND), (INST), (M7_SEND), (M10_RECV)]
+P2 [(M1_RECV), (M2_SEND), (M6_SEND), (INST), (M8_RECV), (M9_SEND), (M4_RECV)]
+P3 [(INST), (M7_RECV), (M6_RECV), (M9_RECV), (M10_SEND)]
+```
+
+When `DEBUG` log level is enabled, the solver prints out each processed events with updated timestamps. It is useful for debugging and also for tracking to understand the algorithm.
+
+```txt
+Handling P0 (M1_SEND) t=[0, 0, 0, 0]...
+M1 sent with value=[1, 0, 0, 0]
+Handling P0 (M3_RECV) t=[1, 0, 0, 0]...
+M3 is not sent, should wait
+Handling P1 (INST) t=[0, 0, 0, 0]...
+instruction executed
+Handling P1 (M3_SEND) t=[0, 1, 0, 0]...
+M3 sent with value=[0, 2, 0, 0]
+Handling P1 (M2_RECV) t=[0, 2, 0, 0]...
+M2 is not sent, should wait
+Handling P2 (M1_RECV) t=[0, 0, 0, 0]...
+```
+
 ### Lamport Timestamp
 
 Likewise, Lamport Timestamp can be simulated as follows.
